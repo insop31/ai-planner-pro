@@ -97,7 +97,7 @@ export function usePlannerStore() {
     };
   }, [tasks]);
 
-  const burnoutRisk = useMemo(() => {
+  const burnoutRisk = useMemo((): 'low' | 'medium' | 'high' => {
     const todayCount = todayTasks.length;
     const totalEst = todayTasks.reduce((s, t) => s + t.estimatedMinutes, 0);
     if (todayCount > 8 || totalEst > 480) return 'high';
