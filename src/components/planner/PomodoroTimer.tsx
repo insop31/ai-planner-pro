@@ -43,17 +43,20 @@ export function PomodoroTimer() {
   const progress = ((total - remaining) / total) * 100;
 
   return (
-    <div className="bg-card rounded-xl shadow-card p-5">
-      <h2 className="font-semibold text-foreground text-lg mb-4">
-        {isBreak ? '☕ Break Time' : '🎯 Focus Session'}
-      </h2>
+    <div className="glass-card rounded-3xl shadow-soft p-5">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-lg">{isBreak ? '☕' : '🎯'}</span>
+        <h2 className="font-bold text-foreground text-lg">
+          {isBreak ? 'Break Time' : 'Focus Session'}
+        </h2>
+      </div>
       <div className="flex flex-col items-center">
-        <div className="relative w-40 h-40 mb-4">
+        <div className="relative w-36 h-36 mb-4">
           <svg className="w-full h-full -rotate-90" viewBox="0 0 128 128">
             <circle cx="64" cy="64" r="56" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
             <circle
               cx="64" cy="64" r="56" fill="none"
-              stroke={isBreak ? 'hsl(var(--success))' : 'hsl(var(--accent))'}
+              stroke={isBreak ? 'hsl(var(--success))' : 'hsl(var(--primary))'}
               strokeWidth="8" strokeLinecap="round"
               strokeDasharray={`${2 * Math.PI * 56}`}
               strokeDashoffset={`${2 * Math.PI * 56 * (1 - progress / 100)}`}
@@ -71,16 +74,18 @@ export function PomodoroTimer() {
             onClick={() => setIsRunning(!isRunning)}
             className={cn(
               'p-3 rounded-full transition-all',
-              isRunning ? 'bg-secondary text-secondary-foreground' : 'gradient-accent text-accent-foreground animate-pulse-glow'
+              isRunning ? 'bg-muted text-muted-foreground' : 'gradient-pink text-primary-foreground animate-pulse-soft'
             )}
           >
             {isRunning ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
           </button>
-          <button onClick={reset} className="p-3 rounded-full bg-secondary text-secondary-foreground hover:bg-muted transition-colors">
+          <button onClick={reset} className="p-3 rounded-full bg-muted text-muted-foreground hover:bg-secondary transition-colors">
             <RotateCcw className="w-5 h-5" />
           </button>
         </div>
-        <p className="text-xs text-muted-foreground mt-3">Sessions completed: {sessionsCompleted}</p>
+        <p className="text-xs text-muted-foreground mt-3 font-medium">
+          ✨ Sessions completed: {sessionsCompleted}
+        </p>
       </div>
     </div>
   );

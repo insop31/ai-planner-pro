@@ -16,53 +16,54 @@ const weekData = [
 ];
 
 const categoryData = [
-  { name: 'Study', value: 40, color: 'hsl(222, 47%, 15%)' },
-  { name: 'Work', value: 25, color: 'hsl(35, 92%, 55%)' },
-  { name: 'Personal', value: 15, color: 'hsl(152, 60%, 45%)' },
-  { name: 'Exercise', value: 15, color: 'hsl(262, 52%, 55%)' },
-  { name: 'Break', value: 5, color: 'hsl(195, 74%, 50%)' },
+  { name: 'Study', value: 40, color: 'hsl(340, 60%, 72%)' },
+  { name: 'Work', value: 25, color: 'hsl(280, 40%, 75%)' },
+  { name: 'Personal', value: 15, color: 'hsl(170, 45%, 65%)' },
+  { name: 'Exercise', value: 15, color: 'hsl(35, 80%, 65%)' },
+  { name: 'Break', value: 5, color: 'hsl(200, 50%, 72%)' },
 ];
 
 export function AnalyticsDashboard({ reflection }: AnalyticsDashboardProps) {
   return (
-    <div className="bg-card rounded-xl shadow-card p-5 space-y-5">
-      <h2 className="font-semibold text-foreground text-lg">📊 Productivity Analytics</h2>
+    <div className="glass-card rounded-3xl shadow-soft p-5 space-y-5">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">📊</span>
+        <h2 className="font-bold text-foreground text-lg">Productivity Analytics</h2>
+      </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <p className="text-2xl font-bold text-foreground">{reflection.completionRate}%</p>
-          <p className="text-xs text-muted-foreground">Completion</p>
-        </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <p className="text-2xl font-bold text-foreground">{reflection.mostProductiveDay}</p>
-          <p className="text-xs text-muted-foreground">Best Day</p>
-        </div>
-        <div className="text-center p-3 bg-muted rounded-lg">
-          <p className="text-2xl font-bold text-foreground">{Math.round(reflection.totalMinutes / 60)}h</p>
-          <p className="text-xs text-muted-foreground">Total Time</p>
-        </div>
+        {[
+          { label: 'Completion', value: `${reflection.completionRate}%`, gradient: 'gradient-pink' },
+          { label: 'Best Day', value: reflection.mostProductiveDay, gradient: 'gradient-lavender' },
+          { label: 'Total Time', value: `${Math.round(reflection.totalMinutes / 60)}h`, gradient: 'gradient-mint' },
+        ].map(s => (
+          <div key={s.label} className={`text-center p-3 rounded-2xl ${s.gradient}`}>
+            <p className="text-xl font-bold text-primary-foreground">{s.value}</p>
+            <p className="text-xs text-primary-foreground/80 font-medium">{s.label}</p>
+          </div>
+        ))}
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-2">Tasks per Day</h3>
-        <ResponsiveContainer width="100%" height={140}>
+        <h3 className="text-sm font-semibold text-muted-foreground mb-2">Tasks per Day</h3>
+        <ResponsiveContainer width="100%" height={130}>
           <BarChart data={weekData}>
-            <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'hsl(215, 16%, 47%)' }} axisLine={false} tickLine={false} />
+            <XAxis dataKey="day" tick={{ fontSize: 11, fill: 'hsl(340, 15%, 50%)' }} axisLine={false} tickLine={false} />
             <YAxis hide />
             <Tooltip
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px', fontSize: '12px' }}
+              contentStyle={{ backgroundColor: 'hsl(20, 50%, 95%)', border: '1px solid hsl(20, 40%, 90%)', borderRadius: '16px', fontSize: '12px' }}
             />
-            <Bar dataKey="tasks" radius={[4, 4, 0, 0]} fill="hsl(35, 92%, 55%)" />
+            <Bar dataKey="tasks" radius={[8, 8, 0, 0]} fill="hsl(340, 60%, 78%)" />
           </BarChart>
         </ResponsiveContainer>
       </div>
 
       <div>
-        <h3 className="text-sm font-medium text-muted-foreground mb-2">Time by Category</h3>
+        <h3 className="text-sm font-semibold text-muted-foreground mb-2">Time by Category</h3>
         <div className="flex items-center gap-4">
-          <ResponsiveContainer width={120} height={120}>
+          <ResponsiveContainer width={110} height={110}>
             <PieChart>
-              <Pie data={categoryData} innerRadius={30} outerRadius={50} dataKey="value" paddingAngle={3}>
+              <Pie data={categoryData} innerRadius={28} outerRadius={48} dataKey="value" paddingAngle={4}>
                 {categoryData.map((entry, i) => (
                   <Cell key={i} fill={entry.color} />
                 ))}
@@ -73,8 +74,8 @@ export function AnalyticsDashboard({ reflection }: AnalyticsDashboardProps) {
             {categoryData.map(c => (
               <div key={c.name} className="flex items-center gap-2 text-xs">
                 <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: c.color }} />
-                <span className="text-muted-foreground">{c.name}</span>
-                <span className="font-medium text-foreground">{c.value}%</span>
+                <span className="text-muted-foreground font-medium">{c.name}</span>
+                <span className="font-bold text-foreground">{c.value}%</span>
               </div>
             ))}
           </div>
