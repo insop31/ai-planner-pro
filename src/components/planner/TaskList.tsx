@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Check, Trash2, AlertTriangle, Plus } from 'lucide-react';
+import { Check, Trash2, AlertTriangle, Plus, Heart } from 'lucide-react';
 import type { Task, Priority, TaskCategory } from '@/types/planner';
 import { cn } from '@/lib/utils';
 
@@ -12,10 +12,10 @@ interface TaskListProps {
   categoryLabels: Record<TaskCategory, string>;
 }
 
-const PRIORITY_STYLES: Record<Priority, string> = {
-  high: 'border-l-priority-high bg-priority-high/5',
-  medium: 'border-l-priority-medium bg-priority-medium/5',
-  low: 'border-l-priority-low bg-priority-low/5',
+const PRIORITY_DOTS: Record<Priority, string> = {
+  high: 'bg-priority-high',
+  medium: 'bg-priority-medium',
+  low: 'bg-priority-low',
 };
 
 export function TaskList({ tasks, onToggle, onDelete, onAdd, taskPrediction, categoryLabels }: TaskListProps) {
@@ -39,43 +39,46 @@ export function TaskList({ tasks, onToggle, onDelete, onAdd, taskPrediction, cat
   });
 
   return (
-    <div className="bg-card rounded-xl shadow-card overflow-hidden">
-      <div className="p-4 flex items-center justify-between border-b border-border">
-        <h2 className="font-semibold text-foreground text-lg">Today's Tasks</h2>
+    <div className="glass-card rounded-3xl shadow-soft overflow-hidden">
+      <div className="p-5 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span className="text-lg">📋</span>
+          <h2 className="font-bold text-foreground text-lg">Today's Tasks</h2>
+        </div>
         <button
           onClick={() => setShowForm(!showForm)}
-          className="flex items-center gap-1.5 text-sm font-medium text-accent hover:text-accent/80 transition-colors"
+          className="flex items-center gap-1.5 text-sm font-semibold text-primary hover:text-primary/70 transition-colors px-3 py-1.5 rounded-full bg-primary/10"
         >
-          <Plus className="w-4 h-4" /> Add Task
+          <Plus className="w-4 h-4" /> Add
         </button>
       </div>
 
       {showForm && (
-        <div className="p-4 border-b border-border bg-muted/50 space-y-3 animate-fade-in">
+        <div className="px-5 pb-4 space-y-3 animate-fade-in">
           <input
             value={title}
             onChange={e => setTitle(e.target.value)}
-            placeholder="Task title..."
-            className="w-full px-3 py-2 rounded-lg bg-background border border-input text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-accent/50"
+            placeholder="What do you want to accomplish? ✨"
+            className="w-full px-4 py-2.5 rounded-2xl bg-muted border-none text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
             onKeyDown={e => e.key === 'Enter' && handleAdd()}
           />
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2 flex-wrap items-center">
             {(['high', 'medium', 'low'] as Priority[]).map(p => (
               <button
                 key={p}
                 onClick={() => setPriority(p)}
                 className={cn(
-                  'px-3 py-1 rounded-full text-xs font-medium capitalize transition-all',
-                  priority === p ? 'bg-foreground text-background' : 'bg-secondary text-secondary-foreground'
+                  'px-3 py-1.5 rounded-full text-xs font-semibold capitalize transition-all',
+                  priority === p ? 'gradient-pink text-primary-foreground shadow-glow' : 'bg-muted text-muted-foreground'
                 )}
               >
-                {p}
+                {p === 'high' ? '🔴' : p === 'medium' ? '🟡' : '🟢'} {p}
               </button>
             ))}
             <select
               value={category}
               onChange={e => setCategory(e.target.value as TaskCategory)}
-              className="px-2 py-1 rounded-lg bg-secondary text-secondary-foreground text-xs border-none"
+              className="px-3 py-1.5 rounded-full bg-muted text-muted-foreground text-xs border-none font-medium"
             >
               {Object.entries(categoryLabels).map(([k, v]) => (
                 <option key={k} value={k}>{v}</option>
@@ -85,54 +88,54 @@ export function TaskList({ tasks, onToggle, onDelete, onAdd, taskPrediction, cat
               type="number"
               value={minutes}
               onChange={e => setMinutes(Number(e.target.value))}
-              className="w-16 px-2 py-1 rounded-lg bg-secondary text-secondary-foreground text-xs"
+              className="w-16 px-3 py-1.5 rounded-full bg-muted text-muted-foreground text-xs border-none text-center"
               placeholder="min"
             />
-            <button onClick={handleAdd} className="px-4 py-1 rounded-full gradient-accent text-accent-foreground text-xs font-semibold">
-              Add
+            <button onClick={handleAdd} className="px-5 py-1.5 rounded-full gradient-pink text-primary-foreground text-xs font-bold shadow-glow">
+              Add ✨
             </button>
           </div>
         </div>
       )}
 
-      <div className="divide-y divide-border max-h-[420px] overflow-y-auto">
+      <div className="divide-y divide-border/50 max-h-[380px] overflow-y-auto px-2 pb-2">
         {sorted.map(task => {
           const prediction = taskPrediction(task);
           return (
             <div
               key={task.id}
               className={cn(
-                'flex items-center gap-3 p-3 border-l-4 transition-all hover:bg-muted/30',
-                PRIORITY_STYLES[task.priority],
-                task.completed && 'opacity-50'
+                'flex items-center gap-3 p-3 rounded-2xl mx-1 my-1 transition-all hover:bg-muted/50',
+                task.completed && 'opacity-40'
               )}
             >
               <button
                 onClick={() => onToggle(task.id)}
                 className={cn(
-                  'w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0',
+                  'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0',
                   task.completed
                     ? 'bg-success border-success'
-                    : 'border-muted-foreground hover:border-accent'
+                    : 'border-primary/40 hover:border-primary hover:bg-primary/10'
                 )}
               >
-                {task.completed && <Check className="w-3 h-3 text-success-foreground" />}
+                {task.completed && <Check className="w-3.5 h-3.5 text-success-foreground" />}
               </button>
+              <div className={cn('w-2 h-2 rounded-full flex-shrink-0', PRIORITY_DOTS[task.priority])} />
               <div className="flex-1 min-w-0">
-                <p className={cn('text-sm font-medium text-foreground', task.completed && 'line-through')}>
+                <p className={cn('text-sm font-semibold text-foreground', task.completed && 'line-through')}>
                   {task.title}
                 </p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="text-xs text-muted-foreground">{task.estimatedMinutes}m</span>
                   {task.timeBlock && <span className="text-xs text-muted-foreground">⏰ {task.timeBlock}</span>}
                   {!task.completed && prediction < 60 && (
-                    <span className="flex items-center gap-0.5 text-xs text-priority-high">
-                      <AlertTriangle className="w-3 h-3" /> {prediction}% likely
+                    <span className="flex items-center gap-0.5 text-xs text-priority-high font-medium">
+                      <AlertTriangle className="w-3 h-3" /> {prediction}%
                     </span>
                   )}
                 </div>
               </div>
-              <button onClick={() => onDelete(task.id)} className="text-muted-foreground hover:text-destructive transition-colors">
+              <button onClick={() => onDelete(task.id)} className="text-muted-foreground/40 hover:text-destructive transition-colors">
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>

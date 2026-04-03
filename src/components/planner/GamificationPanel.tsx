@@ -12,18 +12,21 @@ export function GamificationPanel({ achievements, points, streak }: Props) {
   const progressToNext = points % 100;
 
   return (
-    <div className="bg-card rounded-xl shadow-card p-5 space-y-4">
-      <h2 className="font-semibold text-foreground text-lg">🏆 Achievements</h2>
+    <div className="glass-card rounded-3xl shadow-soft p-5 space-y-4">
+      <div className="flex items-center gap-2">
+        <span className="text-lg">🏆</span>
+        <h2 className="font-bold text-foreground text-lg">Achievements</h2>
+      </div>
 
-      <div className="gradient-accent rounded-lg p-4 text-center">
-        <p className="text-3xl font-bold text-accent-foreground">Level {level}</p>
-        <div className="w-full bg-background/30 rounded-full h-2 mt-2">
+      <div className="gradient-lavender rounded-2xl p-4 text-center">
+        <p className="text-3xl font-bold text-secondary-foreground">Level {level}</p>
+        <div className="w-full bg-background/40 rounded-full h-2.5 mt-2">
           <div
-            className="h-2 rounded-full bg-background/80 transition-all duration-500"
+            className="h-2.5 rounded-full gradient-pink transition-all duration-500"
             style={{ width: `${progressToNext}%` }}
           />
         </div>
-        <p className="text-xs text-accent-foreground/80 mt-1">{progressToNext}/100 to next level</p>
+        <p className="text-xs text-secondary-foreground/70 mt-1.5 font-medium">{progressToNext}/100 to next level ✨</p>
       </div>
 
       <div className="grid grid-cols-3 gap-2">
@@ -31,12 +34,12 @@ export function GamificationPanel({ achievements, points, streak }: Props) {
           <div
             key={a.id}
             className={cn(
-              'flex flex-col items-center p-3 rounded-lg text-center transition-all',
-              a.unlocked ? 'bg-muted' : 'bg-muted/40 opacity-50'
+              'flex flex-col items-center p-3 rounded-2xl text-center transition-all',
+              a.unlocked ? 'bg-muted shadow-soft' : 'bg-muted/30 opacity-40'
             )}
           >
             <span className="text-2xl">{a.icon}</span>
-            <p className="text-xs font-medium text-foreground mt-1 leading-tight">{a.title}</p>
+            <p className="text-xs font-bold text-foreground mt-1 leading-tight">{a.title}</p>
           </div>
         ))}
       </div>

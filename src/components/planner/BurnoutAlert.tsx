@@ -1,4 +1,4 @@
-import { AlertTriangle, Shield, Flame } from 'lucide-react';
+import { AlertTriangle, Flame } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface Props {
@@ -11,23 +11,23 @@ export function BurnoutAlert({ risk }: Props) {
   return (
     <div
       className={cn(
-        'rounded-xl p-4 flex items-start gap-3 animate-fade-in',
-        risk === 'high' ? 'bg-destructive/10 border border-destructive/20' : 'bg-warning/10 border border-warning/20'
+        'rounded-2xl p-4 flex items-start gap-3 animate-fade-in glass-card',
+        risk === 'high' ? 'border border-destructive/30 bg-destructive/5' : 'border border-warning/30 bg-warning/5'
       )}
     >
       {risk === 'high' ? (
-        <Flame className="w-5 h-5 text-destructive flex-shrink-0 mt-0.5" />
+        <span className="text-xl flex-shrink-0">🔥</span>
       ) : (
-        <AlertTriangle className="w-5 h-5 text-warning flex-shrink-0 mt-0.5" />
+        <span className="text-xl flex-shrink-0">💛</span>
       )}
       <div>
-        <p className="text-sm font-semibold text-foreground">
-          {risk === 'high' ? '⚠️ Burnout Risk Detected' : '🔔 Schedule Advisory'}
+        <p className="text-sm font-bold text-foreground">
+          {risk === 'high' ? 'Burnout Risk Detected' : 'Schedule Advisory'}
         </p>
-        <p className="text-xs text-muted-foreground mt-0.5">
+        <p className="text-xs text-muted-foreground mt-0.5 font-medium">
           {risk === 'high'
-            ? 'Your schedule is overloaded. Consider removing some tasks or adding breaks to avoid fatigue.'
-            : 'You have a busy day ahead. Make sure to take regular breaks between tasks.'}
+            ? 'Your schedule may cause fatigue. Consider adding breaks or removing some tasks 🌸'
+            : 'Busy day ahead! Remember to take breaks between tasks 💆‍♀️'}
         </p>
       </div>
     </div>
